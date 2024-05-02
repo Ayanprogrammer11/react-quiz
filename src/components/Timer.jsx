@@ -4,15 +4,12 @@ function Timer({ dispatch, timerCount }) {
   const timerRef = useRef(null);
 
   function formatSeconds(seconds) {
-    // Calculate minutes and remaining seconds
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
 
-    // Pad minutes and seconds with leading zeros if needed
     const formattedMinutes = String(minutes).padStart(2, "0");
     const formattedSeconds = String(remainingSeconds).padStart(2, "0");
 
-    // Format the output string
     const output = `${formattedMinutes}:${formattedSeconds}`;
 
     return output;
