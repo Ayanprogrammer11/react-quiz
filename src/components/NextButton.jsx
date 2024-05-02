@@ -4,7 +4,7 @@ function NextButton({ dispatch, answer, index, numQuestions }) {
   return (
     <button
       className="btn btn-ui"
-      onClick={() => dispatch({ type: isLast ? "finishQuiz" : "nextQuestion" })}
+      onClick={() => dispatch({ type: isLast ? "finish" : "nextQuestion" })}
     >
       {isLast ? "Finish" : "Next"}
     </button>

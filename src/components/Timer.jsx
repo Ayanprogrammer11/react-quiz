@@ -1,45 +1,25 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
-function Timer({ dispatch, timerCount }) {
-  const timerRef = useRef(null);
-
-  function formatSeconds(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(remainingSeconds).padStart(2, "0");
-
-    const output = `${formattedMinutes}:${formattedSeconds}`;
-
-    return output;
-  }
-
+function Timer({ dispatch, secondsRemaining }) {
+  const minutes = Math.floor(secondsRemaining / 60);
+  const seconds = secondsRemaining % 60;
   useEffect(
     function () {
-      const timerId = setInterval(function () {
-        dispatch({ type: "setTimer" });
+      const id = setInterval(function () {
+        dispatch({ type: "tick" });
       }, 1000);
-      timerRef.current = timerId;
 
-      return function () {
-        clearInterval(timerRef.current);
-      };
+      return () => clearInterval(id);
     },
     [dispatch]
   );
-
-  useEffect(
-    function () {
-      if (timerCount === 0) {
-        clearInterval(timerRef.current);
-        dispatch({ type: "timedOut" });
-      }
-    },
-    [timerCount, dispatch]
+  return (
+    <div className="timer">
+      {minutes < 10 && "0"}
+      {minutes}:{seconds < 10 && "0"}
+      {seconds}
+    </div>
   );
-
-  return <div className="timer">{formatSeconds(timerCount)}</div>;
 }
 
 export default Timer;

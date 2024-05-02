@@ -7,8 +7,12 @@ import StartScreen from "./StartScreen";
 import Question from "./Question";
 import NextButton from "./NextButton";
 import Progress from "./Progress";
-import EndScreen from "./EndScreen";
 import Timer from "./Timer";
+import FinishScreen from "./FinishScreen";
+import Footer from "./Footer";
+
+const SECS_PER_QUESTION = 30;
+
 const initialState = {
   questions: [],
   // "loading", "error", "ready", "active", "finished"
@@ -17,26 +21,22 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
-  timerCount: 10 * 60,
+  secondsRemaining: null,
 };
 
 function reducer(state, action) {
-  function finishQuiz() {
-    const isNeedUpdate = state.points > state.highscore;
-    return {
-      ...state,
-      status: "finished",
-      answer: null,
-      highscore: isNeedUpdate ? state.points : state.highscore,
-    };
-  }
   switch (action.type) {
     case "dataReceived":
-      return { ...state, questions: action.payload, status: "ready" };
+      const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+      return { ...state, questions: shuffle(action.payload), status: "ready" };
     case "dataFailed":
       return { ...state, status: "error" };
     case "start":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        secondsRemaining: state.questions.length * SECS_PER_QUESTION,
+      };
     case "newAnswer":
       const question = state.questions.at(state.index);
       return {
@@ -49,20 +49,33 @@ function reducer(state, action) {
       };
     case "nextQuestion":
       return { ...state, index: state.index + 1, answer: null };
-    case "finishQuiz":
-      return finishQuiz();
-    case "restartQuiz":
+    case "finish":
       return {
         ...state,
-        index: 0,
-        status: "active",
-        points: 0,
-        timerCount: 10,
+        status: "finished",
+        answer: null,
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
       };
-    case "setTimer":
-      return { ...state, timerCount: state.timerCount - 1 };
-    case "timedOut":
-      return finishQuiz();
+    case "restart":
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: "ready",
+        highscore: state.highscore,
+      };
+
+    case "tick":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+        highscore:
+          state.secondsRemaining === 0
+            ? Math.max(state.points, state.highscore)
+            : state.highscore,
+      };
+
     default:
       throw new Error("Dispatched Action type Unknown!");
   }
@@ -70,7 +83,7 @@ function reducer(state, action) {
 
 function App() {
   const [
-    { questions, status, index, answer, points, highscore, timerCount },
+    { questions, status, index, answer, points, highscore, secondsRemaining },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -110,17 +123,19 @@ function App() {
               dispatch={dispatch}
               answer={answer}
             />
-            <Timer dispatch={dispatch} timerCount={timerCount} />
-            <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-              numQuestions={numQuestions}
-            />
+            <Footer>
+              <Timer dispatch={dispatch} secondsRemaining={secondsRemaining} />
+              <NextButton
+                dispatch={dispatch}
+                answer={answer}
+                index={index}
+                numQuestions={numQuestions}
+              />
+            </Footer>
           </>
         )}
         {status === "finished" && (
-          <EndScreen
+          <FinishScreen
             points={points}
             maxPossiblePoints={maxPossiblePoints}
             dispatch={dispatch}
