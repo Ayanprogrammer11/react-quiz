@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 function FinishScreen({ points, maxPossiblePoints, dispatch, highscore }) {
   const percentage = Math.ceil((points / maxPossiblePoints) * 100);
   let emoji;
@@ -6,6 +8,14 @@ function FinishScreen({ points, maxPossiblePoints, dispatch, highscore }) {
   if (percentage >= 50 && percentage < 80) emoji = "🙃";
   if (percentage >= 0 && percentage < 50) emoji = "🤨";
   if (percentage === 0) emoji = "🤦‍♂️";
+
+  useEffect(
+    function () {
+      localStorage.setItem("highscore", highscore + "");
+    },
+    [highscore]
+  );
+
   return (
     <>
       <p className="result">
