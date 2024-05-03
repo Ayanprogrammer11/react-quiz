@@ -124,6 +124,7 @@ function App() {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && (
+          //
           <>
             <Progress
               numQuestions={numQuestions}
