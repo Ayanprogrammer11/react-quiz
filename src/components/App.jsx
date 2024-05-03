@@ -104,6 +104,7 @@ function App() {
     (acc, question) => acc + question.points,
     0
   );
+  //
   useEffect(function () {
     fetch(window.env.QUESTIONS_JSON_API)
       .then((res) => res.json())
