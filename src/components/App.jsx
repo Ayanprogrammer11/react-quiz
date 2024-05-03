@@ -105,9 +105,11 @@ function App() {
     0
   );
   useEffect(function () {
-    fetch("http://localhost:8000/questions")
+    fetch(window.env.QUESTIONS_JSON_API)
       .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataReceived", payload: data }))
+      .then((data) =>
+        dispatch({ type: "dataReceived", payload: data.record.questions })
+      )
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
 
