@@ -107,9 +107,10 @@ function App() {
   useEffect(function () {
     fetch(window.env.QUESTIONS_JSON_API)
       .then((res) => res.json())
-      .then((data) =>
-        dispatch({ type: "dataReceived", payload: data.record.questions })
-      )
+      .then((data) => {
+        console.log(data);
+        dispatch({ type: "dataReceived", payload: data.questions });
+      })
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
 
