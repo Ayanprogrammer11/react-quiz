@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Loader from "./Loader";
@@ -10,6 +10,7 @@ import Progress from "./Progress";
 import Timer from "./Timer";
 import FinishScreen from "./FinishScreen";
 import Footer from "./Footer";
+import Review from "./Review";
 
 const SECS_PER_QUESTION = 30;
 
@@ -19,6 +20,7 @@ const initialState = {
   status: "loading",
   index: 0,
   answer: null,
+  answers: [],
   points: 0,
   highscore: +localStorage.getItem("highscore") || null,
   secondsRemaining: null,
@@ -42,6 +44,7 @@ function reducer(state, action) {
       return {
         ...state,
         answer: action.payload,
+        answers: [...state.answers, action.payload],
         points:
           action.payload === question.correctOption
             ? state.points + question.points
@@ -83,7 +86,16 @@ function reducer(state, action) {
 
 function App() {
   const [
-    { questions, status, index, answer, points, highscore, secondsRemaining },
+    {
+      questions,
+      status,
+      index,
+      answer,
+      answers,
+      points,
+      highscore,
+      secondsRemaining,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -135,12 +147,16 @@ function App() {
           </>
         )}
         {status === "finished" && (
-          <FinishScreen
-            points={points}
-            maxPossiblePoints={maxPossiblePoints}
-            dispatch={dispatch}
-            highscore={highscore}
-          />
+          <>
+            <FinishScreen
+              points={points}
+              maxPossiblePoints={maxPossiblePoints}
+              dispatch={dispatch}
+              highscore={highscore}
+              answers={answers}
+              questions={questions}
+            />
+          </>
         )}
       </Main>
     </div>

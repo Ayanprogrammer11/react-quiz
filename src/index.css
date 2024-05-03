@@ -37,7 +37,13 @@ body {
 }
 
 .main {
-  width: 50rem;
+  width: 65%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .app-header {
@@ -174,6 +180,7 @@ progress {
 
 .result {
   background-color: var(--color-theme);
+  width: 50%;
   color: var(--color-light);
   border-radius: 100px;
   text-align: center;
@@ -186,6 +193,38 @@ progress {
 .result span {
   font-size: 2.2rem;
   margin-right: 4px;
+}
+
+.review {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  list-style: none;
+}
+
+.review-list-item {
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  border-radius: 10px;
+  transition: 0.3s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-list-item.correct {
+  background-color: var(--color-theme);
+}
+
+.review-list-item.wrong {
+  background-color: var(--color-dark);
 }
 
 .highscore {
@@ -257,4 +296,109 @@ progress {
 .counter * {
   font-size: inherit;
   padding: 0.8rem;
+}
+
+/* Responsive design media queries */
+
+@media screen and (max-width: 1024px) {
+  .main {
+    width: 80%;
+  }
+
+  .app-header {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    width: 90%;
+  }
+
+  .app-header {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .btn {
+    font-size: 1.8rem;
+    padding: 1rem 2rem;
+  }
+
+  .btn-option {
+    font-size: 1.8rem;
+  }
+
+  .progress {
+    font-size: 1.6rem;
+  }
+
+  .timer {
+    font-size: 1.6rem;
+    padding: 1rem 2.4rem;
+  }
+
+  .review-list-item {
+    font-size: 1.6rem;
+  }
+
+  .review-list-item span {
+    font-size: 1.8rem;
+  }
+
+  .highscore {
+    font-size: 1.6rem;
+  }
+
+  .loader {
+    width: 40px;
+    height: 20px;
+    background-size: calc(100% / 3) 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .main {
+    width: 95%;
+  }
+
+  .app-header {
+    gap: 1rem;
+  }
+
+  .btn {
+    font-size: 1.6rem;
+    padding: 0.8rem 1.6rem;
+  }
+
+  .btn-option {
+    font-size: 1.6rem;
+  }
+
+  .progress {
+    font-size: 1.4rem;
+  }
+
+  .timer {
+    font-size: 1.4rem;
+    padding: 0.8rem 2rem;
+  }
+
+  .review-list-item {
+    font-size: 1.4rem;
+  }
+
+  .review-list-item span {
+    font-size: 1.6rem;
+  }
+
+  .highscore {
+    font-size: 1.4rem;
+  }
+
+  .loader {
+    width: 30px;
+    height: 15px;
+    background-size: calc(100% / 3) 7px;
+  }
 }
