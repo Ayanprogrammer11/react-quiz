@@ -1,4 +1,12 @@
-function Progress({ numQuestions, index, points, answer, maxPossiblePoints }) {
+import { memo, useMemo } from "react";
+import { useQuestions } from "../contexts/QuestionsContext";
+
+const Progress = memo(function Progress({ questions, index, answer, points }) {
+  const maxPossiblePoints = useMemo(function () {
+    return questions.reduce((acc, question) => acc + question.points, 0);
+  }, []);
+
+  const numQuestions = questions.length;
   return (
     <header className="progress">
       <progress max={numQuestions} value={index + Number(answer !== null)} />
@@ -10,6 +18,19 @@ function Progress({ numQuestions, index, points, answer, maxPossiblePoints }) {
       </p>
     </header>
   );
+});
+
+function ProgressContextWrapper() {
+  const { questions, index, answer, points } = useQuestions();
+
+  return (
+    <Progress
+      questions={questions}
+      index={index}
+      answer={answer}
+      points={points}
+    />
+  );
 }
 
-export default Progress;
+export default ProgressContextWrapper;

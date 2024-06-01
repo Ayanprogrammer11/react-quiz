@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import Review from "./Review";
+import { useQuestions } from "../contexts/QuestionsContext";
 
-function FinishScreen({
-  points,
-  maxPossiblePoints,
-  dispatch,
-  highscore,
-  answers,
-  questions,
-}) {
+function FinishScreen() {
+  const { points, dispatch, highscore, questions } = useQuestions();
+  const maxPossiblePoints = questions.reduce(
+    (acc, question) => acc + question.points,
+    0
+  );
   const percentage = Math.ceil((points / maxPossiblePoints) * 100);
   let emoji;
   if (percentage === 100) emoji = "🥇";
@@ -41,7 +40,7 @@ function FinishScreen({
         </button>
       </div>
 
-      <Review answers={answers} questions={questions} />
+      <Review />
     </>
   );
 }

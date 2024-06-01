@@ -1,7 +1,10 @@
 import { useEffect } from "react";
+import { useQuestions } from "../contexts/QuestionsContext";
 
-function Timer({ dispatch, secondsRemaining }) {
-  const minutes = Math.floor(secondsRemaining / 60);
+function Timer() {
+  const { dispatch, secondsRemaining } = useQuestions();
+  const hours = Math.floor(secondsRemaining / (60 * 60));
+  const minutes = hours % 60;
   const seconds = secondsRemaining % 60;
   useEffect(
     function () {
@@ -15,9 +18,9 @@ function Timer({ dispatch, secondsRemaining }) {
   );
   return (
     <div className="timer">
-      {minutes < 10 && "0"}
-      {minutes}:{seconds < 10 && "0"}
-      {seconds}
+      {hours < 1 ? null : hours < 10 ? `0${hours}:` : `${hours}:`}
+      {minutes < 10 ? `0${minutes}` : minutes}:
+      {seconds < 10 ? `0${seconds}` : seconds}
     </div>
   );
 }

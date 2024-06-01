@@ -1,4 +1,8 @@
-function NextButton({ dispatch, answer, index, numQuestions }) {
+import { useQuestions } from "../contexts/QuestionsContext";
+
+function NextButton() {
+  const { answer, questions, dispatch, index } = useQuestions();
+  const numQuestions = questions.length;
   if (answer === null) return;
   const isLast = index + 1 === numQuestions;
 

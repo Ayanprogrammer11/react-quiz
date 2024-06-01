@@ -1,6 +1,8 @@
+import { useQuestions } from "../contexts/QuestionsContext";
 import { truncateFromMiddle } from "../lib/utility";
 
-function Review({ questions, answers }) {
+function Review() {
+  const { answers, questions } = useQuestions();
   const correctNums = questions.reduce((acc, question, questionIndex) => {
     const answerIndex = questionIndex;
     return question.correctOption === answers[answerIndex] ? acc + 1 : acc;
@@ -13,10 +15,15 @@ function Review({ questions, answers }) {
       <div className="result" style={{ backgroundColor: "#ffa94d" }}>
         <span>REVIEW</span>
       </div>
-      <h4 className="review-correct">
-        You got <strong>{correctNums}</strong> questions correct out of{" "}
-        <strong>{questions.length}</strong> questions
-      </h4>
+      {correctNums === questions.length ? (
+        <h4 className="review-correct">You got all of the questions correct</h4>
+      ) : (
+        <h4 className="review-correct">
+          You got <strong>{correctNums}</strong>{" "}
+          {correctNums > 1 ? "questions" : "question"} correct out of{" "}
+          <strong>{questions.length}</strong> questions
+        </h4>
+      )}
       <ul className="review-list">
         {questions.map((question, questionIndex) => (
           <li
